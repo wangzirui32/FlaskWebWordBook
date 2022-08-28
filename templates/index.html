@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web在线单词本</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <style>
+        body {
+            background-image: -moz-linear-gradient(90deg, rgb(184, 238, 255), rgb(231, 255, 199));
+            background-image: -webkit-linear-gradient(90deg, rgb(184, 238, 255), rgb(231, 255, 199));
+            background-image: linear-gradient(90deg, rgb(184, 238, 255), rgb(231, 255, 199));
+        }
+        #words-table a {
+            font-size: 25px;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Web在线单词本</h1>
+        <a href="/add" class="btn btn-primary">新增单词</a>
+        <hr>
+        <div id="words-table" class="row"></div>
+        <script>
+            $words_table = $("#words-table");
+            $.ajax({
+                type: 'GET',
+                url: '/api/word',
+                success: function(data){
+                    $.each(data.data, function(i, item){
+                        $words_table.append("<div class='col-md-2'><a class='text-center' href='/show/" + item.word + "'>" + item.word + "</a></div>");
+                    });
+                },
+            });
+        </script>
+    </div>
+</body>
+</html>

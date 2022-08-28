@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web在线单词本</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <style>
+        body {
+            background-image: -moz-linear-gradient(90deg, rgb(184, 238, 255), rgb(231, 255, 199));
+            background-image: -webkit-linear-gradient(90deg, rgb(184, 238, 255), rgb(231, 255, 199));
+            background-image: linear-gradient(90deg, rgb(184, 238, 255), rgb(231, 255, 199));
+        }
+        #word{
+            font-size: 45px;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            color: black;
+            padding-right: 30px;
+        }
+        #explain {
+            font-size: 25px;
+            font-family: YouYuan;
+        }
+        #dditiona {
+            color: gray;
+            font-size: 25px;
+            font-family: YouYuan;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">查看单词 - {{word}}</h1>
+        <hr>
+        <div>
+            <p id="word">
+                <b>{{word}}</b>
+                <button onclick="play_audio();" style="background: none; border: none;">
+                    <span class="glyphicon glyphicon-bullhorn"></span>
+                </button>
+            </p>
+            <b id="explain"></b>
+            <p id="additiona"></p>
+            <audio id="audio" style="display: none;"></audio>
+            <script>
+                $words_table = $("#words-table");
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/get-word-data',
+                    data: {
+                        word: "{{word}}",
+                    },
+                    success: function(data){
+                        $.each(data.explain, function(i, item){
+                            $("#explain").append("<p>" + item + "</p>");
+                        });
+                        $("#additiona").text(data.additiona)
+                        $("#audio").append(
+                            "<source type='audio/mpeg' src='" + data.url +"' />"
+                        );
+                    },
+                });
+                function play_audio(){
+                    document.getElementById("audio").play();
+                }
+                function remove_word(){
+                    $.ajax({
+                        type: 'DELETE',
+                        url: '/api/word',
+                        data: {
+                            word: "{{word}}",
+                        },
+                        success: function(data){
+                            window.location.href = "/";
+                        },
+                    });
+                }
+            </script>
+            <button class="btn btn-danger" onclick="remove_word();">删除该单词</button>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web在线单词本</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <style>
+        body {
+            background-image: -moz-linear-gradient(90deg, rgb(184, 238, 255), rgb(231, 255, 199));
+            background-image: -webkit-linear-gradient(90deg, rgb(184, 238, 255), rgb(231, 255, 199));
+            background-image: linear-gradient(90deg, rgb(184, 238, 255), rgb(231, 255, 199));
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Web在线单词本</h1>
+        <hr>
+        <div id="add-words">
+            <h1>新增单词</h1>
+            <input class="form-control" id="word-input" placeholder="新单词输入在这里哦~" style="width: 500px"/>
+            <p style="height: 10px;"></p>
+            <button class="btn btn-primary" onclick="submit();">添加</button>
+            <a href="/" class="btn btn-danger">取消</a>
+        </div>
+        <script>
+            function submit(){
+                var word = $("#word-input").val();
+                if (word == ""){
+                    alert("单词不能为空！");
+                    return;
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/word',
+                    data: {
+                        word: word
+                    },
+                    success: function(data){
+                        window.location.href = "/";
+                    },
+                });
+            }
+        </script>
+    </div>
+</body>
+</html>
